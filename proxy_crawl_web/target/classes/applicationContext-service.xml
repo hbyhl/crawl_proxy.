@@ -1,0 +1,25 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+        
+   
+    <bean id="xPathAnalyzer" class="cn.focus.crawl.impl.XPathAnalyzer" />
+	<bean id="demoAnalyzer" class="cn.focus.crawl.impl.DemoAnalyzer" />
+	<bean id="testService" class="cn.focus.crawl.service.TestService" />
+	<bean id="configBean" class="cn.focus.crawl.model.ConfigBean">
+		<property name="beanList">
+			<list>
+				<ref bean="xPathAnalyzer" />
+			</list>
+		</property>
+		<property name="urlList">
+			<list>						
+				<value>http://letushide.com/filter/http,all,all/list_of_free_HTTP_proxy_servers</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

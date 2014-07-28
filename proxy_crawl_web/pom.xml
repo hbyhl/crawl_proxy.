@@ -1,0 +1,331 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.sohu</groupId>
+		<artifactId>focus-root-pom</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>cn.focus</groupId>
+	<artifactId>proxy_crawl_web</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>proxy_crawl</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>cn.focus.commons</groupId>
+			<artifactId>base-commons</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.paoding</groupId>
+			<artifactId>paoding-rose</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.paoding</groupId>
+			<artifactId>paoding-rose-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.paoding</groupId>
+			<artifactId>paoding-rose-jade</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.wanghaomiao</groupId>
+			<artifactId>JsoupXpath</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+
+		<!-- 基础类的依赖包 -->
+		<dependency>
+			<groupId>cn.focus.commons</groupId>
+			<artifactId>base-commons</artifactId>
+		</dependency>
+		<!-- maven-jadegen-plugin的依赖包 -->
+		<dependency>
+			<groupId>com.codegen</groupId>
+			<artifactId>maven-jadegen-plugin</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.6.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>4.0.5.RELEASE</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>cn.focus.crawl.start.Main</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+
+			<!-- 设置源文件编码方式 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>cn.focus.crawl.start.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<!-- 拷贝依赖的jar包到lib目录 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<!-- <goals> <goal>copy-dependencies</goal> </goals> -->
+						<configuration>
+							<outputDirectory>
+								${project.build.directory}/lib
+							</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- 解决资源文件的编码问题 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- 打包source文件为jar文件 -->
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<configuration>
+					<attach>true</attach>
+					<encoding>UTF-8</encoding>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.1.11.v20130520</version>
+				<configuration>
+					<systemProperties>
+						<systemProperty>
+							<name>DEBUG</name>
+							<value>TRUE</value>
+						</systemProperty>
+					</systemProperties>
+					<scanIntervalSeconds>5</scanIntervalSeconds>
+					<stopKey>focus</stopKey>
+					<stopPort>9999</stopPort>
+					<scanTargetPatterns>
+						<scanTargetPattern>
+							<directory>src/main/webapp/WEB-INF</directory>
+							<excludes>
+								<exclude>**/*.jsp</exclude>
+							</excludes>
+							<includes>
+								<include>**/*.properties</include>
+								<include>**/*.xml</include>
+							</includes>
+						</scanTargetPattern>
+					</scanTargetPatterns>
+				</configuration>
+				<executions>
+					<execution>
+						<id>start-jetty</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<scanIntervalSeconds>0</scanIntervalSeconds>
+							<daemon>true</daemon>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-jetty</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- 数据库 -->
+			<plugin>
+				<groupId>com.codegen</groupId>
+				<artifactId>maven-jadegen-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<configuration>
+					<!-- 默认值 是 com.mysql.jdbc.Driver, 可根据需要确定是否修改数据库配置信息 -->
+					<driverClass>com.mysql.jdbc.Driver</driverClass>
+					<dbUrl>jdbc:mysql://10.10.90.156:3306/crawl_data_test</dbUrl>
+
+					<dbUser>develop</dbUser>
+					<dbPassword>p3m12d</dbPassword>
+
+					<!-- 数据库表名，根据需要进行修改，默认是 % 全部， 支持前缀形式 比如：user_%;如果是散表,随意取 一个散表的表名如test_04及可生成散表格式的DAO 
+						;注意：当genType=2时，必须写%，表示生成此数据库下全部表的表wiki格式的表结构，暂不支持指定表 -->
+
+					<tbNamePattern>proxy_pool_test</tbNamePattern>
+
+					<!--genType=1/2； 1：生成jade的DAO及Model; 2: 生成wiki格式的表结构，此时tbNamePattern只能为 
+						% -->
+					<genType>1</genType>
+
+					<!-- 生成的DAO和Model的包路径，注：包要事先建好，否则执行时可能报错 -->
+					<modelPkg>cn.focus.crawl.model</modelPkg>
+					<daoPkg>cn.focus.crawl.dao</daoPkg>
+					<wikiPkg>cn.focus.crawl.wiki</wikiPkg>
+
+					<!-- 默认是 工程 src/main/java 目录 -->
+					<srcFolder>${project.build.sourceDirectory}</srcFolder>
+
+					<!-- 基础类的设置 -->
+					<baseObjectClass>cn.focus.dc.commons.model.BaseObject</baseObjectClass>
+					<pkClass>cn.focus.dc.commons.annotation.PrimaryKey</pkClass>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>cn.focus.crawl.start.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<!-- 拷贝依赖的jar包到lib目录 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.properties</include>
+					<include>**/*.vm</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+</project>

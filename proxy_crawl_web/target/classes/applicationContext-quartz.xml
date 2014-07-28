@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd  
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<!-- 第一种集成方式：MethodInvokingJobDetailFactoryBean，并且job类，直接是pojo类，与普通类没有区别 -->
+	<!-- 定义具体的任务类 -->
+	<bean id="quartzMain" class="cn.focus.crawl.start.Main">
+		<property name="config" ref="configBean"></property>
+		<property name="testService" ref="testService"></property>
+	</bean>
+	<!-- 定义jobDetail -->
+	<bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 目标类 -->
+		<property name="targetObject">
+			<ref bean="quartzMain" />
+		</property>
+		<!-- 目标类中要执行的方法 ,这个参数是必须的 -->
+		<property name="targetMethod">
+			<value>start</value>
+		</property>
+	</bean>
+
+	<!-- 定义simpleTrigger触发器 -->
+	<!-- <bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> 
+		<property name="jobDetail" ref="jobDetail"></property> <property name="repeatCount"> 
+		<value>8</value> </property> <property name="repeatInterval"> <value>1000</value> 
+		</property> <property name="startDelay"> <value>4</value> </property> </bean> -->
+
+	<!-- 另一种触发器是CornTrigger -->
+	<bean id="cornTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<!-- 下午3点51分 -->
+		<property name="cronExpression" value="* 23/30 * * * ? *" />
+	</bean>
+
+	<!-- 定义核心调度器 -->
+	<bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<ref bean="cornTrigger" />
+		</property>
+	</bean>
+</beans>  
