@@ -30,6 +30,7 @@ public class XPathAnalyzer implements Analyzer {
     @Override
     public void parse(String url) {
         try {
+//            parseDetailed(url);
             List<String> urlList = getAllurl(url);
             for (String inerURL : urlList) {
                 System.out.println(inerURL);

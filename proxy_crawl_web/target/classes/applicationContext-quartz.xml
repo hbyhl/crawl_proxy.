@@ -36,7 +36,7 @@
 	<bean id="cornTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="jobDetail" />
 		<!-- 下午3点51分 -->
-		<property name="cronExpression" value="* 23/30 * * * ? *" />
+		<property name="cronExpression" value="0 56 15 * * ? *" />
 	</bean>
 
 	<!-- 定义核心调度器 -->
